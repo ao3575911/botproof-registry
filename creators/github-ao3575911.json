@@ -1,0 +1,15 @@
+{
+  "v": 1,
+  "type": "creator",
+  "links": [
+    {
+      "type": "github",
+      "user": "ao3575911",
+      "proof": "https://gist.github.com/ao3575911/e249a8c4414f3b993c4cb2d81d994b86"
+    }
+  ],
+  "handle": "github:ao3575911",
+  "ts": "2026-10-09T14:53:31.691Z",
+  "key": "ed25519:cWBFcD049yIbHq6mVXGSGwbzShJp9MPmBfCGsO2h0-E",
+  "sig": "Pu3-C0_0X65WyH5303y3_U5q-e1u0H40OT_m4KtjIAXCwGk0KSyP0nfONce8Ag9oaG6wFkXxS497-dUiTqCYDQ"
+}
