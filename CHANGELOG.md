@@ -1,6 +1,10 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.1] - 2026-10-10
+
+### Added
+- Dependabot for GitHub Actions.
+- `tag` workflow: tags are created and GPG-signed in CI (key C35E1B10…1BCBA754, shared with the CLI releases). v0.3.1 is the first signed registry tag; v0.3.0 is unsigned.
 
 ### Security
 - Guard on `platforms.json`, the trusted-platform list:
