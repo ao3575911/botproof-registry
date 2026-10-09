@@ -1,6 +1,7 @@
 name: verify
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
   push: { branches: [main] }
 permissions: { contents: read }
 jobs:
@@ -25,3 +26,30 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           AUTHOR: ${{ github.event.pull_request.user.login }}
+  platforms:
+    # Flags any origin added to platforms.json. It fails until a maintainer adds the
+    # `platforms-reviewed` label (outsiders cannot label PRs).
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { fetch-depth: 0, persist-credentials: false }
+      - name: New trusted origins need review
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          REVIEWED: ${{ contains(github.event.pull_request.labels.*.name, 'platforms-reviewed') }}
+        run: |
+          node --input-type=module -e '
+            import { readFileSync, existsSync } from "node:fs";
+            import { execFileSync } from "node:child_process";
+            const origins = (s) => new Set(Object.values(JSON.parse(s || "{}")).flat().map((p) => p.origin));
+            let base = "";
+            try { base = execFileSync("git", ["show", process.env.BASE_SHA + ":platforms.json"], { encoding: "utf8" }); } catch {}
+            const head = existsSync("platforms.json") ? readFileSync("platforms.json", "utf8") : "";
+            const old = origins(base), added = [...origins(head)].filter((o) => !old.has(o));
+            if (!added.length) { console.log("no new trusted origins"); process.exit(0); }
+            for (const o of added) console.log(`::warning file=platforms.json::new trusted origin ${o} needs maintainer review`);
+            if (process.env.REVIEWED === "true") { console.log("reviewed by a maintainer (platforms-reviewed label)"); process.exit(0); }
+            console.log("::error file=platforms.json::adds trusted origin(s): " + added.join(", ") + ". A maintainer must review and add the platforms-reviewed label.");
+            process.exit(1);
+          '

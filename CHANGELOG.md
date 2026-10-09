@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+### Security
+- Guard on `platforms.json`, the trusted-platform list:
+  - CODEOWNERS (`/platforms.json`, `/.github/`) plus a ruleset requiring code-owner review.
+  - A new `platforms` CI check flags every origin a PR adds. It stays red until a maintainer adds the `platforms-reviewed` label.
+
 ## [0.3.0] - 2026-10-09
 
 ### Changed
