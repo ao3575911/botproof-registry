@@ -3,22 +3,25 @@ on:
   push: { branches: [main] }
   schedule: [{ cron: "17 3 * * *" }]   # re-check every proof nightly
   workflow_dispatch:
-permissions: { contents: read, pages: write, id-token: write }
+permissions: { contents: read, pages: write, id-token: write, attestations: write }
 concurrency: { group: pages, cancel-in-progress: true }
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: { name: github-pages, url: "${{ steps.d.outputs.page_url }}" }
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with: { repository: ao3575911/botproof, path: .cli }
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { persist-credentials: false }
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with: { repository: ao3575911/botproof, ref: 8b76983a9d10b869c54e394f49fedb1e02ff573f, path: .cli, persist-credentials: false } # v0.3.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with: { node-version: 22 }
       - run: cd .cli && npm ci && npm run build
       - run: node .cli/dist/src/cli.js registry build . _site
-        env: { GITHUB_TOKEN: "${{ github.token }}" }
-      - uses: actions/upload-pages-artifact@v3
+        env: { GITHUB_TOKEN: "${{ github.token }}" }   # GITHUB_SHA is recorded as registryCommit
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with: { path: _site }
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with: { subject-path: "${{ runner.temp }}/artifact.tar" }
       - id: d
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
