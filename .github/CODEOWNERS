@@ -1,0 +1,3 @@
+# The trusted-platform list and CI need the owner to approve them.
+/platforms.json @ao3575911
+/.github/ @ao3575911
