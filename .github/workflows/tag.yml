@@ -1,0 +1,30 @@
+# Cut a signed registry tag: gh workflow run tag -R ao3575911/botproof-registry -f version=vX.Y.Z
+# The signing key exists only in the RELEASE_GPG_KEY secret (shared with ao3575911/botproof).
+name: tag
+on:
+  workflow_dispatch:
+    inputs:
+      version: { description: "tag, e.g. v0.3.1", required: true }
+permissions: { contents: write }
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Create and push the GPG-signed tag
+        env:
+          TAG: ${{ inputs.version }}
+          GPG_KEY: ${{ secrets.RELEASE_GPG_KEY }}
+        run: |
+          test "$GITHUB_REF" = refs/heads/main
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "::error::bad tag $TAG"; exit 1; }
+          grep -q "^## \[${TAG#v}\]" CHANGELOG.md || { echo "::error::CHANGELOG has no ${TAG#v} section"; exit 1; }
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then echo "::error::$TAG exists"; exit 1; fi
+          export GNUPGHOME="$RUNNER_TEMP/gnupg"; mkdir -m 700 "$GNUPGHOME"
+          printf '%s\n' "$GPG_KEY" | gpg --batch --quiet --import
+          fpr=$(gpg --list-secret-keys --with-colons | awk -F: '/^fpr/{print $10; exit}')
+          git -c user.name=ao3575911 -c user.email=280728713+ao3575911@users.noreply.github.com \
+              -c user.signingkey="$fpr" tag -s "$TAG" -m "registry $TAG"
+          git tag -v "$TAG"
+          git push origin "refs/tags/$TAG"
+          rm -rf "$GNUPGHOME"
