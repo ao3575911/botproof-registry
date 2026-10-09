@@ -1,0 +1,18 @@
+{
+  "v": 1,
+  "type": "bot",
+  "platform": "web",
+  "botId": "botproof-demo",
+  "name": "botproof demo bot",
+  "model": "none",
+  "version": "0.1.0",
+  "challenge": {
+    "nonce": "a250fe91c6c5400335",
+    "url": "https://gist.github.com/ao3575911/7e127f9b381acce9ca929811752703f2",
+    "issued": "2026-10-09T14:53:31.778Z"
+  },
+  "creator": "github:ao3575911",
+  "ts": "2026-10-09T14:53:36.275Z",
+  "key": "ed25519:cWBFcD049yIbHq6mVXGSGwbzShJp9MPmBfCGsO2h0-E",
+  "sig": "vKN-4FHX6gofTG3BkUtPQSxqg1qEiTFMB_exNeppxNuDV9UTWO-Es4HPEjV-2M7aDNzo_GRTysr4PTI-WVX_DQ"
+}
