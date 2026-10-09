@@ -21,7 +21,7 @@ jobs:
         env: { GITHUB_TOKEN: "${{ github.token }}" }   # GITHUB_SHA is recorded as registryCommit
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with: { path: _site }
-      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with: { subject-path: "${{ runner.temp }}/artifact.tar" }
       - id: d
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
