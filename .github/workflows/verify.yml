@@ -1,0 +1,18 @@
+name: verify
+on:
+  pull_request:
+  push: { branches: [main] }
+permissions: { contents: read }
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: { repository: ao3575911/botproof, path: .cli }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: cd .cli && npm ci && npm run build
+      - name: Check signatures and live proofs
+        run: node .cli/dist/src/cli.js registry check .
+        env: { GITHUB_TOKEN: "${{ github.token }}" }
