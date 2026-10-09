@@ -7,12 +7,13 @@
   "model": "none",
   "version": "0.1.0",
   "challenge": {
-    "nonce": "a250fe91c6c5400335",
+    "nonce": "221c0f99e07b842dcf",
     "url": "https://gist.github.com/ao3575911/7e127f9b381acce9ca929811752703f2",
-    "issued": "2026-10-09T14:53:31.778Z"
+    "issued": "2026-10-09T16:20:11.722Z"
   },
   "creator": "github:ao3575911",
-  "ts": "2026-10-09T14:53:36.275Z",
+  "ts": "2026-10-09T16:20:20.956Z",
+  "seq": 1,
   "key": "ed25519:cWBFcD049yIbHq6mVXGSGwbzShJp9MPmBfCGsO2h0-E",
-  "sig": "vKN-4FHX6gofTG3BkUtPQSxqg1qEiTFMB_exNeppxNuDV9UTWO-Es4HPEjV-2M7aDNzo_GRTysr4PTI-WVX_DQ"
+  "sig": "N_-iRYmahIh13gpr7dEVaGkZIVrxmBvKDUlw3VJBUkrewy9U7XkleKZKEVL8GaLYbCTG2K7NXqU0E2EecEB8Dg"
 }
